@@ -1,37 +1,50 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
     public Vector2 inputVec;
-    public float speed = 0.4F;
+    public float speed = 70F;
     Rigidbody2D rigid;
+    Animator animator;
 
+    Boolean flipX;
+ 
+    SpriteRenderer spriteRenderer;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+
     }
     // Start is called before the first frame update
     void Start()
     {
         
     }
-
-    // Update is called once per frame
-    void Update()
+    void OnMove(InputValue value)
     {
-        inputVec.x = Input.GetAxisRaw("Horizontal"); //Raw가 있으면 오직 1 혹은 0만 나옴, 없으면 0.0~1.0 까지 나옴
-        inputVec.y = Input.GetAxisRaw("Vertical");
-       
+        inputVec = value.Get<Vector2>();
+        
     }
 
     void FixedUpdate()
     {
-        Vector2 nextVector = inputVec.normalized * speed * Time.fixedDeltaTime;
+        Vector2 nextVector = inputVec * speed * Time.fixedDeltaTime;
         rigid.MovePosition(rigid.position + nextVector);
+    }
 
+    void LateUpdate()
+    {
+    
+        animator.SetFloat("Speed", inputVec.magnitude);
 
+        spriteRenderer.flipX = inputVec.x < 0;
     }
 }
