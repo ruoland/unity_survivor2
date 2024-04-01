@@ -26,12 +26,12 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+                                    Debug.Log("이거 작동 하나?");
+
     }
     void OnMove(InputValue value)
     {
         inputVec = value.Get<Vector2>();
-        
     }
 
     void FixedUpdate()
